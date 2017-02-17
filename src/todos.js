@@ -91,13 +91,10 @@ $(function(){
     }
 
     shouldComponentUpdate (nextProps) {
-
   		return true;
     }
 
     componentWillReceiveProps (nextProps) {
-  		//this.model.set({done: curr.model.done || false, title: curr.model.title});
-	    console.log('state before', this.state, nextProps.model.toJSON());
 	    this.setState(_.extend(this.state, nextProps.model.toJSON()));
     }
 
@@ -247,6 +244,7 @@ $(function(){
       this.listenTo(Todos, 'reset', this.addAll);
       this.listenTo(Todos, 'all', this.render);
       this.listenTo(Todos, 'change', this.triggerReact);
+      this.listenTo(Todos, 'remove', this.triggerReact);
 
       this.footer = this.$('footer');
       this.main = $('#main');
@@ -286,7 +284,7 @@ $(function(){
 	  triggerReact: function() {
 
     	var destroy = (model) => {
-    		Todos.remove(model);
+    		model.destroy.call(model);
 	    }
 
 		  var todoCombiner = (Todos) => {
